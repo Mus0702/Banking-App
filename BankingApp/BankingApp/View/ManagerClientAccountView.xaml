@@ -1,0 +1,60 @@
+﻿<f:UserControlBase x:Class="BankingApp.View.ManagerClientAccountView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:BankingApp.ViewModel"
+             xmlns:vw="clr-namespace:BankingApp.View"
+             xmlns:c="clr-namespace:BankingApp"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+   
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <f:MyDataGrid
+            
+            ItemsSource="{Binding Accounts}"  
+            CanUserAddRows="False"
+            AutoGenerateColumns="False"
+            x:Name="gridAccesses" Grid.ColumnSpan="2" Margin="0,0,5,0"
+            >
+            <DataGrid.Columns>
+                <DataGridTextColumn  Header="IBAN" Width="auto" Binding="{Binding InternalAccount.Iban}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Type" Width="auto" Binding="{Binding TypeCLient}" IsReadOnly="True" />
+                <DataGridTextColumn Header="Balance" Width="100" Binding="{Binding InternalAccount.Balance,Converter={vw:CurrencyToStringWithNoPlusSignConverter}}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn  Header="Floor" Width="100" Binding="{Binding InternalAccount.Floor,Converter={vw:CurrencyToStringWithPlusSignConverter}}" IsReadOnly="True" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTemplateColumn  Header="" Width="auto"  IsReadOnly="True" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button IsEnabled="true" Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type f:UserControlBase}}, Path=DataContext.AccountDetailsShow}" CommandParameter="{Binding}">Account Details</Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </f:MyDataGrid>
+        <WrapPanel Grid.Row="1" >
+            <TextBlock Text="Nouvel accès à un compte existant " FontSize="12"/>
+            <ComboBox ItemsSource="{Binding FreeAccounts}" DisplayMemberPath="Iban" SelectedItem="{Binding FreeIban}" Width="153" Margin="0,5,10,0" />
+            <ComboBox ItemsSource="{Binding SelectableAccess}"  SelectedItem="{Binding SelectedTypeCLient}" Width="105"  Margin="0,5,0,0"/>
+            <Button Content="Add Account" Command="{Binding AddAccess}" Width="80" Margin="10,5,0,0"/>
+
+
+        </WrapPanel>
+    </Grid>
+</f:UserControlBase>

@@ -1,0 +1,49 @@
+﻿<f:UserControlBase x:Class="BankingApp.View.AccountCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:BankingApp.ViewModel"
+             xmlns:vw="clr-namespace:BankingApp.View"
+             xmlns:m="clr-namespace:BankingApp.Model"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type=m:ClientInternalAccount, IsDesignTimeCreatable=True}"
+             Width="auto" Height="auto">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel  Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center"  Text="{Binding InternalAccount.Iban}" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel  Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center"  Text="{Binding InternalAccount.Description}" FontWeight="Bold"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center"  Text= "Type: "/>
+            <TextBlock HorizontalAlignment="Center"  Text="{Binding InternalAccount.AccountType}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" >
+            <TextBlock   Text="Access: "/>
+            <TextBlock  Text="{Binding TypeCLient}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+            <TextBlock  Text="Floor: "/>
+            <TextBlock   Text="{Binding InternalAccount.Floor,Converter={vw:CurrencyToStringWithPlusSignConverter}}"/>
+        </StackPanel>
+        <TextBlock Grid.Row="5" HorizontalAlignment="Center"  Text="{Binding InternalAccount.Balance, Converter={vw:CurrencyToStringWithPlusSignConverter}}" Style="{StaticResource Saldo}" FontSize="15" FontWeight="Bold"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="6">
+            <Button Margin="2" Content="Statements" Command="{Binding ShowStatements, ElementName=vm}" CommandParameter="{Binding}" />
+            <Button Margin="2" Content="Transfer" Command="{Binding NewTransfer, ElementName=vm}" CommandParameter="{Binding}" />
+        </StackPanel>
+    </Grid>
+</f:UserControlBase>

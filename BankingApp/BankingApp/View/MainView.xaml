@@ -1,0 +1,43 @@
+﻿<f:WindowBase x:Class="BankingApp.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:vm="clr-namespace:BankingApp.ViewModel"
+         xmlns:vw="clr-namespace:BankingApp.View"
+         xmlns:c="clr-namespace:BankingApp"
+        xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+        mc:Ignorable="d"
+        Title="{Binding Info,StringFormat=MyBank {0}}" Height="800" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:MainViewModel x:Name="vm" CloseTab="Vm_CloseTab"/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Menu>
+            <MenuItem Header="Logout" Click="MenuLogout_Click"/>
+            <MenuItem Header="Reload" Command="{Binding ReloadDataCommand}" />
+        </Menu>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Label Content="Current Data:"  />
+            <DatePicker SelectedDate="{Binding Path=(c:App.CurrentDate)}" HorizontalAlignment="Right" />
+        </StackPanel>
+        <f:MyTabControl x:Name="tabControl" Margin="10" Grid.Row="1" HasCloseButton="True">
+            <TabItem x:Name="accountsTab" Header="Accounts" Tag="Accounts"  Visibility="{Binding IsNotManager, Converter={f:BoolToVisibleConverter}}">
+            <vw:AccountsView/>
+        </TabItem>
+            <TabItem x:Name="nanagerTab" Header="Manager" Tag="Accounts"  Visibility="{Binding IsManager, Converter={f:BoolToVisibleConverter}}">
+                <vw:ManagerAgencyView/>
+            </TabItem>
+        </f:MyTabControl>
+
+        
+    </Grid>
+</f:WindowBase>

@@ -1,0 +1,95 @@
+﻿<f:UserControlBase x:Class="BankingApp.View.StatementCardView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:f="clr-namespace:PRBD_Framework;assembly=PRBD_Framework"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:m="clr-namespace:BankingApp.Model"
+             xmlns:vw="clr-namespace:BankingApp.View"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+            Width="500" Height="auto">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel  Margin="0,5,0,0">
+            <TextBlock FontWeight="Bold" FontSize="15">
+                                <Run Text="{Binding Description}"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="0,5,0,0" Orientation="Horizontal" >
+            <TextBlock >
+                                    <Run Text="Created on: "/>
+                                    <Run Text="{Binding CreationDate, StringFormat=dd/MM/yyyy HH:mm:ss}" FontWeight="Bold"/>
+            </TextBlock>
+            <TextBlock  Visibility="{Binding IsEffectDateDifferentCreationDate,Converter={f:BoolToVisibleConverter}}" Margin="30,0,0,0">
+                                    <Run Text="Effective on: "/>
+                                    <Run Text="{Binding EffectiveDate,StringFormat=dd/MM/yyyy}" FontWeight="Bold"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="0,5,0,0">
+            <TextBlock >
+              <Run Text="Created by: "/>
+               <Run Text="{Binding User.LastName}" FontWeight="Bold"/>
+                <Run Text="{Binding User.FirstName}" FontWeight="Bold"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="3" Margin="0,5,0,0">
+            <TextBlock >
+                                <Run Text="From: "/>
+                                <Run Text="{Binding OriginAccount.Description}" FontWeight="Bold"/>
+                                <Run Text="(" />
+                                <Run Text="{Binding OriginAccount.Iban}"/>
+                                <Run Text=")"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Margin="0,5,0,0">
+            <TextBlock >
+                                <Run Text="To: "/>
+                                <Run Text="{Binding DestinationAccount.Description}" FontWeight="Bold"/>
+                                <Run Text="(" />
+                                <Run Text="{Binding DestinationAccount.Iban}"/>
+                                <Run Text=")"/>
+            </TextBlock>
+        </StackPanel>
+        <StackPanel  Grid.Row="5" Margin="0,5,0,0">
+            <TextBlock>
+                <Run Text="Tx #"/>
+                <Run Text="{Binding TransferId}"/>
+            </TextBlock>
+            <TextBlock  Text="This transaction is foreseen in the future. You make cancel it. "  Visibility="{Binding HasEffectiveDateValue,Converter={f:BoolToVisibleConverter}}" Foreground="Blue"/>
+            <TextBlock Visibility="{Binding IsTransferRefusedAndBeforeCurrentDate,Converter={f:BoolToVisibleConverter}}" Foreground="red"  TextWrapping="WrapWithOverflow">
+               <Run Text="This transaction has been refused because it would have given you a balance below the allowed floor value of "/>
+                <Run Text="{Binding OriginAccount.Floor}"  FontWeight="Bold"/>
+                <Run Text="€"  FontWeight="Bold"/>
+            </TextBlock>
+        </StackPanel>
+        <Button Grid.Row="5" Grid.Column="1" Content=" Cancel" Command="{Binding Cancel,ElementName=vm}" CommandParameter="{Binding}" Width="60" Height="20" Visibility="{Binding HasEffectiveDateValue,Converter={f:BoolToVisibleConverter}}" Margin="0,0,5,0" VerticalAlignment="Bottom"/>
+        <WrapPanel Grid.Row="6" Margin="5,5,0,5" >
+            <TextBlock Text="Category: "/>
+            <ComboBox ItemsSource="{Binding Path=AllCategories,ElementName=vm}" DisplayMemberPath="Name" SelectedItem ="{Binding Category}" Width="346">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="SelectionChanged">
+                        <i:InvokeCommandAction Command="{Binding SaveCategory,ElementName=vm}" 
+                             CommandParameter="{Binding}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ComboBox>
+        </WrapPanel>
+        <StackPanel Grid.Column="2"  Margin="0,5,5,0">
+            <TextBlock Text="{Binding AmountCopy,Converter={vw:CurrencyToStringWithPlusSignConverter}}" Style="{StaticResource Saldo}" FontWeight="Bold" FontSize="15"/>
+            <TextBlock Visibility="{Binding IsBalanceVisible,Converter={f:BoolToVisibleConverter}}" Text="{Binding BalanceTransfer,Converter={vw:CurrencyToStringWithPlusSignConverter}}"  Style="{StaticResource Saldo}" FontWeight="Bold" FontSize="10"></TextBlock>
+        </StackPanel>
+    </Grid>
+</f:UserControlBase>
